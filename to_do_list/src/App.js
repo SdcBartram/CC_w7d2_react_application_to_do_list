@@ -10,14 +10,14 @@ function App() {
   ])
 
   const [newToDo, setNewToDo] = useState("")
-  const [newPriority, setNewPriority] = useState(""); 
+  const [newPriority, setNewPriority] = useState(false); 
 
   const handleToDoInput = (event) => {
     setNewToDo(event.target.value)
   }
 
   const handlePriority = (event) => {
-    setNewPriority(event.target.value)
+    setNewPriority(event.target.value === "true")
   }
 
   const completeToDo = (toDoId) => {
@@ -44,7 +44,7 @@ function App() {
     setToDos(nextToDos)
 
     setNewToDo("")
-    setNewPriority("")
+    setNewPriority(false)
   }
 
   return (
@@ -54,9 +54,9 @@ function App() {
       <form onSubmit={saveNewToDo}>
         <label htmlFor='new-todo'>Add a new todo: </label>
         <input id='new-todo' type='text' value={newToDo} onChange={handleToDoInput} />
-        <input id="high" type="radio"  name="priority" value="true" onChange={handlePriority}/>
+        <input id="high" type="radio"  name="priority" value="true" checked={newPriority===true} onChange={handlePriority}/>
           <label htmlFor="high">High</label>
-          <input id="low" type="radio"  name="priority" value="false" onChange={handlePriority}/>
+          <input id="low" type="radio"  name="priority" value="false" checked={newPriority===false} onChange={handlePriority}/>
           <label htmlFor="low">Low</label>
         <input type='submit' value="Save Item" />
 
