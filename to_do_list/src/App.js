@@ -4,10 +4,21 @@ import {useState} from 'react';
 function App() {
 
   const [toDos, setToDos] = useState([
-    {id: 1, name: "Buy shopping"},
-    {id: 2, name: "Clean bathroom"},
-    {id: 3, name: "Car's MOT"},
+    {id: 1, name: "Buy shopping", priority: true},
+    {id: 2, name: "Clean bathroom", priority: false},
+    {id: 3, name: "Car's MOT", priority: true},
   ])
+
+  const [newToDo, setNewToDo] = useState("")
+  const [newPriority, setNewPriority] = useState(""); 
+
+  const handleToDoInput = (event) => {
+    setNewToDo(event.target.value)
+  }
+
+  const handlePriority = (event) => {
+    setNewPriority(event.target.value)
+  }
 
   const completeToDo = (toDoId) => {
     const newToDos = toDos.filter((toDo) => toDo.id !== toDoId)
@@ -16,28 +27,24 @@ function App() {
 
   const listToDos = toDos.map((toDo) => {
     return(
-      <li key={toDo.id}>
-        {toDo.name}
-        <button onClick={() => completeToDo(toDo.id)}>Complete</button>
+      <li key={toDo.id} className={toDo.priority ? 'high_priority' : 'low_priority'}>
+        {toDo.name} 
+        
+        <button onClick={() => completeToDo(toDo.id)}
+        >Complete</button>
       </li>
     )
   })
 
-
-  const [newToDo, setNewToDo] = useState("")
-
-  const handleToDoInput = (event) => {
-    setNewToDo(event.target.value)
-  }
-
   const saveNewToDo = (event) => {
     event.preventDefault();
 
-    const newToDoObj = {id: Date.now(), name:newToDo}
+    const newToDoObj = {id: Date.now(), name:newToDo, priority:newPriority}
     const nextToDos = [...toDos, newToDoObj]
     setToDos(nextToDos)
 
     setNewToDo("")
+    setNewPriority("")
   }
 
   return (
@@ -47,6 +54,10 @@ function App() {
       <form onSubmit={saveNewToDo}>
         <label htmlFor='new-todo'>Add a new todo: </label>
         <input id='new-todo' type='text' value={newToDo} onChange={handleToDoInput} />
+        <input id="high" type="radio"  name="priority" value="true" onChange={handlePriority}/>
+          <label htmlFor="high">High</label>
+          <input id="low" type="radio"  name="priority" value="false" onChange={handlePriority}/>
+          <label htmlFor="low">Low</label>
         <input type='submit' value="Save Item" />
 
       </form>
